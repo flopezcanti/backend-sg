@@ -10,8 +10,8 @@ var productorSchema = new Schema({
     web: { type:  String},
     usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' },
     descripcion:  { type: String, required: [true, 'La descripción  es necesaria'] },
-    categoria: { type: Schema.Types.ObjectId, ref: 'Categoria', required: true },
-    familiaProducto: { type: String, required: true },
+    //categoria: { type: Schema.Types.ObjectId, ref: 'Categoria', required: true },
+    //familiaProducto: { type: String, required: true },
     status: { type: Boolean, required: true, default: true },
     productos: [{ type: Schema.Types.ObjectId, ref: 'Producto' }],
 });
