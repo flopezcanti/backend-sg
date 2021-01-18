@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 
 
 app.use(require('./routes/index'));
-//app.use(express.static('public'));
+app.use(express.static('public'));
 
 //mongoose conection
 mongoose.connect(process.env.URLDB, {
