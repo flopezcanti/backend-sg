@@ -10,6 +10,7 @@ app.get('/producto', [verificaToken, verificaHoreca_Role], (req, res) => {
   Producto.find({ status: true })
   .sort('nombre')
   .populate('categoria', 'nombre familias')
+
   .exec((err, productos) => {
     if(err){
       return res.status(500).json({
@@ -61,7 +62,7 @@ app.post('/producto', [verificaToken, verificaProducer_Role], (req, res) => {
       })
     }      
     
-    Productor.updateOne({usuario: req.usuario._id}, { $set: { productos: producto }}, (err, success)=> {
+    Productor.updateOne({usuario: req.usuario._id}, { $push: { productos: producto }}, (err, success)=>{
       if(err){
         console.log(err)
       }

@@ -38,6 +38,28 @@ app.get('/usuario',  [verificaToken],  (req, res) => {
           })
 })
 
+//  UN USUARIO por ID =>
+app.get('/usuario/:id', (req, res) => {
+  let id = req.params.id;
+
+  Usuario.findById({ _id: id },{ status: true })
+  .populate('productor')
+  .populate('productorData')
+    .exec((err, usuario) => {
+    if(err){
+      return res.status(500).json({
+        ok: false,
+        err
+      })
+    }
+    res.json({
+      ok: true,
+      usuario
+    })
+  });
+})
+
+
 //AÑADIR DATOS BÁSICOS DE USUARIO
 app.post('/usuario', [verificaToken], function (req, res) {
   let body = req.body;
