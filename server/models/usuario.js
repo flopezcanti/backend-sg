@@ -14,9 +14,11 @@ let usuarioSchema = new Schema({
   password : { type: String, required: [true, 'Password es necesaria'] },
   logo : {type: String, required: false },
   header : { type: String, required: false  },
-  gallery : [{type: String, required: false }],
   role : { type: String, default: 'USER_ROLE', enum: rolesValidos },
   status : { type: Boolean, default: true  },
+  productorData: [{ type: Schema.Types.ObjectId, ref: 'Productor' }],
+  productos: [{ type: Schema.Types.ObjectId, ref: 'Producto' }],
+
 })
 
 //Delete the password in JSON response. The pass exist in the DB but not shown in JSON response

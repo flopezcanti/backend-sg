@@ -59,7 +59,7 @@ app.post('/productor', [verificaToken, verificaProducer_Role], (req, res) => {
       })
     }
     console.log(req.usuario._id)
-    Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $set: { productorData: productor }}, (err, success) =>{
+    Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $push: { productorData: productor }}, (err, success) =>{
     
       if(err){
         console.log(err)
@@ -130,6 +130,21 @@ app.put('/productor/:id', [verificaToken, verificaProducer_Role], (req, res) => 
         err
       })
     }
+    Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $push: { productorData: productor }}, (err, success) =>{
+    
+      if(err){
+        console.log(err)
+      } 
+      if (success){
+        console.log('ok', success)
+      }
+    });
+
+    res.status(201).json({
+      ok: true,
+      productor: productorDB 
+    })
+
     res.json({
       ok: true,
       productor: productorDB 
