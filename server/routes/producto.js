@@ -61,7 +61,7 @@ app.post('/producto', [verificaToken, verificaProducer_Role], (req, res) => {
       })
     }      
     
-    Productor.updateOne({usuario: req.usuario._id}, { $push: { productos: producto }}, (err, success)=> {
+    Productor.updateOne({usuario: req.usuario._id}, { $set: { productos: producto }}, (err, success)=> {
       if(err){
         console.log(err)
       }

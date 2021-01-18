@@ -10,8 +10,7 @@ let Usuario = require('../models/usuario');
 app.get('/productor', [verificaToken], (req, res) => {
   Productor.find({ status: true })
   .sort('nombre')
-  .populate('usuario', 'nombre role email logo header')
-  .populate('productos')
+  .populate('usuario')
   .exec((err, productor) => {
     if(err){
       return res.status(500).json({
@@ -59,7 +58,7 @@ app.post('/productor', [verificaToken, verificaProducer_Role], (req, res) => {
       })
     }
     console.log(req.usuario._id)
-    Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $push: { productorData: productor }}, (err, success) =>{
+    Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $set: { productorData: productor }}, (err, success) =>{
     
       if(err){
         console.log(err)
@@ -79,12 +78,10 @@ app.post('/productor', [verificaToken, verificaProducer_Role], (req, res) => {
 //  UN USUARIO por ID =>
 app.get('/productor/:id', (req, res) => {
   let id = req.params.id;
-  let body = req.body;
 
   Productor.findById({ _id: id },{ status: true })
   .sort('nombre')
   .populate('usuario',)
-  .populate('productos')
   .exec((err, productor) => {
     if(err){
       return res.status(500).json({
