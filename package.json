@@ -1,0 +1,26 @@
+{
+  "name": "sagr-rest-server",
+  "version": "1.0.0",
+  "description": "SAGra REST server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "rest-server"
+  },
+  "author": "flc",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.9",
+    "mongoose-unique-validator": "^2.0.3",
+    "underscore": "^1.12.0"
+  }
+}
