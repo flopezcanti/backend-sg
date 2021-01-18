@@ -10,9 +10,6 @@ var productoSchema = new Schema({
     tipoCapacidadEnvaseUni: { type: String, required: true },
     formatoVenta: { type: String, required: true },
     registroSanitario: {type: String},
-    categoria: { type: Schema.Types.ObjectId, ref: 'Categoria', required: true },
-    familiaProducto: { type: String, required: true },
-    usuario: { type: Schema.Types.ObjectId, ref: 'Usuario' },
     status: { type: Boolean, required: true, default: true }
 });
 

@@ -81,7 +81,7 @@ app.get('/productor/:id', (req, res) => {
   let id = req.params.id;
   let body = req.body;
 
-  Productor.find({ status: true })
+  Productor.findById({ _id: id },{ status: true })
   .sort('nombre')
   .populate('usuario',)
   .populate('productos')

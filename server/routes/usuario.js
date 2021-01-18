@@ -16,8 +16,8 @@ app.get('/usuario',  [verificaToken],  (req, res) => {
   limite = Number(limite);
 
   Usuario.find({status: true})
-          .populate('productor')
-          .populate('productorData')
+          // .populate('productor')
+          // .populate('productorData')
           .skip(desde)
           .limit(limite)
           .exec((err, usuarios) => {
