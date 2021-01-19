@@ -45,6 +45,7 @@ app.get('/usuario/:id', (req, res) => {
   Usuario.findById({ _id: id },{ status: true })
   .populate('productor')
   .populate('productorData')
+  .populate('horecaData')
 
     .exec((err, usuario) => {
     if(err){

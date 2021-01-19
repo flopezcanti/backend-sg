@@ -18,6 +18,7 @@ let usuarioSchema = new Schema({
   role : { type: String, default: 'USER_ROLE', enum: rolesValidos },
   status : { type: Boolean, default: true  },
   productorData: [{ type: Schema.Types.ObjectId, ref: 'Productor' }],
+  horecaData: [{ type: Schema.Types.ObjectId, ref: 'Horeca' }],
   productos: [{ type: Schema.Types.ObjectId, ref: 'Producto' }],
 })
 
