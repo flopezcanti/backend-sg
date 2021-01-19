@@ -85,12 +85,13 @@ app.post('/usuario', [verificaToken], function (req, res) {
     })
   })
 })
-
-app.put('/usuario/:id', [verificaToken], function (req, res) {
+// [verificaToken],
+app.put('/usuario/:id',  function (req, res) {
   let id = req.params.id;
-  let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'status']);
-  
-  Usuario.findByIdAndUpdate(id, body, {new: true, runValidators: true}, (err, usuarioDB) => {
+  let body = req.body;
+  //_.pick(req.body, ['nombre', 'email', 'logo', 'header', 'gallery', 'role', 'status']);
+  //, runValidators: true
+  Usuario.findByIdAndUpdate(id, body, {new: true}, (err, usuarioDB) => {
 
     if (err) {
       return res.status(400).json({
