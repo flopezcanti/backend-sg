@@ -82,7 +82,9 @@ app.get('/productor/:id', (req, res) => {
   Productor.findById({ _id: id },{ status: true })
   .sort('nombre')
   .populate('usuario',)
-  .exec((err, productor) => {
+  .populate('productos')
+  .populate('productorData')
+    .exec((err, productor) => {
     if(err){
       return res.status(500).json({
         ok: false,

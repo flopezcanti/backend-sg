@@ -45,6 +45,7 @@ app.get('/usuario/:id', (req, res) => {
   Usuario.findById({ _id: id },{ status: true })
   .populate('productor')
   .populate('productorData')
+
     .exec((err, usuario) => {
     if(err){
       return res.status(500).json({
