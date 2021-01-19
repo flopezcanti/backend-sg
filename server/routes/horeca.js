@@ -6,7 +6,7 @@ const app = express();
 let Horeca = require('../models/horeca');
 let Usuario = require('../models/usuario');
 
-//LISTAR PRODUCTORES EN GENERAL => TODOS HORECAS
+//LISTAR HORECAS EN GENERAL => TODOS HORECAS
 app.get('/horeca', [verificaToken], (req, res) => {
   Horeca.find({ status: true })
   .sort('nombre')
@@ -26,9 +26,8 @@ app.get('/horeca', [verificaToken], (req, res) => {
 })
 
 
-
 //AÑADIR DATOS DE USUARIO
-app.post('/horeca', [verificaToken, verificaHoreca_Role], (req, res) => {
+app.post('/horeca', [verificaToken], (req, res) => {
   let body = req.body;
 
   let horeca = new Horeca({
@@ -45,7 +44,11 @@ app.post('/horeca', [verificaToken, verificaHoreca_Role], (req, res) => {
     emailcompras: body.emailcompras,
     atencionproveedores: body.atencionproveedores,
     nombreresponsablecompras:body.nombreresponsablecompras,
-    categoriasdeinteres: body.categoriasdeinteres, 
+    categoriasdeinteres: body.categoriasdeinteres,
+    usuario: req.usuario._id,
+    logo : body.logo,
+    header : body.header,
+    gallery : body.gallery,
   });
 
   horeca.save((err, horecaDB) => {
@@ -61,7 +64,6 @@ app.post('/horeca', [verificaToken, verificaHoreca_Role], (req, res) => {
         err
       })
     }
-
     console.log(req.usuario._id)
     Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $push: { horecaData: horeca }}, (err, success) =>{
     
@@ -75,7 +77,7 @@ app.post('/horeca', [verificaToken, verificaHoreca_Role], (req, res) => {
 
     res.status(201).json({
       ok: true,
-      productor: horecaDB 
+      horeca: horecaDB 
     })
   })
 })
@@ -84,11 +86,9 @@ app.post('/horeca', [verificaToken, verificaHoreca_Role], (req, res) => {
 app.get('/horeca/:id', (req, res) => {
   let id = req.params.id;
 
-  Horeca.findById({ _id: id },{ status: true })
+  Horeca.findById({ _id: id })
   .sort('nombre')
   .populate('usuario')
-  .populate('horeca')
-  .populate('horecaData')
     .exec((err, horeca) => {
     if(err){
       return res.status(500).json({
@@ -104,107 +104,115 @@ app.get('/horeca/:id', (req, res) => {
 })
 
 
-// // MODIFICAR UN USUARIO =>
-// app.put('/productor/:id', [verificaToken, verificaProducer_Role], (req, res) => {
-//   let id = req.params.id;
-//   let body = req.body;
+// MODIFICAR UN USUARIO =>
+app.put('/horeca/:id', [verificaToken], (req, res) => {
+  let id = req.params.id;
+  let body = req.body;
 
-
-//   let productor = {
-//     zonaubicacion: body.zonaubicacion,
-//     direccion: body.direccion,
-//     poblacion: body.poblacion,
-//     codigopostal: body.codigopostal,
-//     telefono: body.telefono,
-//     web: body.web,
-//     descripcion: body.descripcion,
-//     familiaProducto: body.familiaProducto,
-//   }; 
+  let horeca = {
+    nombre: body.nombre,
+    zonaubicacionGranada: body.zonaubicacion,
+    otraszonas: body.otraszonas,
+    tiponegocio: body.tiponegocio,
+    direccion: body.direccion,
+    poblacion: body.poblacion,
+    codigopostal: body.codigopostal,
+    telefono: body.telefono,
+    web: body.web,
+    descripcion:  body.descripcion,
+    emailcompras: body.emailcompras,
+    atencionproveedores: body.atencionproveedores,
+    nombreresponsablecompras:body.nombreresponsablecompras,
+    categoriasdeinteres: body.categoriasdeinteres,
+    logo : body.logo,
+    header : body.header,
+    gallery : body.gallery,
+  };
   
-//   Productor.findByIdAndUpdate(id, productor, {new: true, runValidators: true}, (err, productorDB) => {
-//     if(err){
-//       return res.status(500).json({
-//         ok: false,
-//         err
-//       })
-//     }
-//     if(!productorDB){
-//       return res.status(500).json({
-//         ok: false,
-//         err
-//       })
-//     }
-//     Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $push: { productorData: productor }}, (err, success) =>{
+  Horeca.findByIdAndUpdate(id, horeca, {new: true, runValidators: true}, (err, horecaDB) => {
+    if(err){
+      return res.status(500).json({
+        ok: false,
+        err
+      })
+    }
+    if(!horecaDB){
+      return res.status(500).json({
+        ok: false,
+        err
+      })
+    }
+    Usuario.findByIdAndUpdate({_id: req.usuario._id}, { $push: { horecaData: horeca }}, (err, success) =>{
     
-//       if(err){
-//         console.log(err)
-//       } 
-//       if (success){
-//         console.log('ok', success)
-//       }
-//     });
+      if(err){
+        console.log(err)
+      } 
+      if (success){
+        console.log('ok', success)
+      }
+    });
 
-//     res.status(201).json({
-//       ok: true,
-//       productor: productorDB 
-//     })
+    res.status(201).json({
+      ok: true,
+      horeca: horecaDB 
+    })
 
-//     res.json({
-//       ok: true,
-//       productor: productorDB 
-//     })
-//   })
-// })
+    res.json({
+      ok: true,
+      horeca: horecaDB 
+    })
+  })
+})
 
-// app.delete('/productor/:id', [verificaToken, verificaAdmin_Role], (req, res) => {
-//   let id = req.params.id;
-//   let body = req.body;
+app.delete('/horeca/:id', [verificaToken], (req, res) => {
+  let id = req.params.id;
+  let body = req.body;
 
-//   productor.findByIdAndRemove(id, (err, productorDB) => {
-//     if(err){
-//       return res.status(500).json({
-//         ok: false,
-//         err
-//       })
-//     }
-//     if(!productorDB){
-//       return res.status(500).json({
-//         ok: false,
-//         err : {
-//           message: 'El productor no existe'
-//         } 
-//       })
-//     }
-//     res.json({
-//       ok: true,
-//       message: 'Productor Borrado'
-//     })
-//   })
-// })
+  horeca.findByIdAndRemove(id, (err, horecaDB) => {
+    if(err){
+      return res.status(500).json({
+        ok: false,
+        err
+      })
+    }
+    if(!horecaDB){
+      return res.status(500).json({
+        ok: false,
+        err : {
+          message: 'El Negocio no existe'
+        } 
+      })
+    }
+    res.json({
+      ok: true,
+      message: 'Negocio Borrado'
+    })
+  })
+})
 
-// // BÚSQUEDA DE PRODUCTORES
-// app.get('/productor/buscar/:termino' , [verificaToken, verificaHoreca_Role], (req, res) => {
+// BÚSQUEDA DE HORECAS
+app.get('/horeca/buscar/:termino' , [verificaToken], (req, res) => {
 
-//   let termino= req.params.termino;
-//   let regex = new RegExp(termino, 'i');
+  let termino= req.params.termino;
+  let regex = new RegExp(termino, 'i');
 
-//   Productor.find({ $and: [ { $or: [{nombre: regex}, {descripcion: regex}, {familiaProducto: regex}] } ] })
-//     .sort('nombre')
-//     .populate('categoria', 'nombre')
-//     .populate('usuario', 'nombre')
-//     .populate('producto', 'nombre')
-//     .exec( (err, productores) => {
-//       if(err){
-//         return res.status(500).json({
-//           ok: false,
-//           err 
-//         })
-//       }
-//       res.json({
-//         ok: true,
-//         productores
-//       })
-//     })    
-// })
+  Horeca.find({ $and: [ { $or: [{zonaubicacionGranada: regex}, {tiponegocio: regex}, {categoriasdeinteres: regex}, {otraszonas: regex}] } ] })
+    .sort('nombre')
+    .populate('categoria', 'nombre')
+    .populate('usuario', 'nombre')
+    .populate('producto', 'nombre')
+    .exec( (err, horeca) => {
+      if(err){
+        return res.status(500).json({
+          ok: false,
+          err 
+        })
+      }
+      res.json({
+        ok: true,
+        horeca
+      })
+    })    
+})
 
 module.exports = app;

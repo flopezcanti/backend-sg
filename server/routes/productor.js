@@ -26,7 +26,6 @@ app.get('/productor', [verificaToken], (req, res) => {
 })
 
 
-
 //AÑADIR DATOS DE USUARIO
 app.post('/productor', [verificaToken, verificaProducer_Role], (req, res) => {
   let body = req.body;
@@ -41,7 +40,7 @@ app.post('/productor', [verificaToken, verificaProducer_Role], (req, res) => {
     descripcion: body.descripcion,
     categoria: body.categoria,
     familiaProducto: body.familiaProducto,
-    usuario: req.usuario._id, 
+    usuario: req.usuario._id
   });
 
   productor.save((err, productorDB) => {
@@ -81,7 +80,7 @@ app.get('/productor/:id', (req, res) => {
 
   Productor.findById({ _id: id },{ status: true })
   .sort('nombre')
-  .populate('usuario',)
+  .populate('usuario')
   .populate('productos')
   .populate('productorData')
     .exec((err, productor) => {
